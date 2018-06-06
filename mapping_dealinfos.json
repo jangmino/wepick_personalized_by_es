@@ -1,0 +1,11 @@
+{
+    "mappings": {
+    "doc": {
+      "properties": {
+        "v": {"type":"long"},
+        "words": {"type":"keyword"},
+        "values": {"type":"double"}
+      }
+    }
+  }
+}

@@ -1,0 +1,75 @@
+# TEST for dc analysis
+PUT /dealinfos
+{
+     "settings":{
+      "analysis":{
+         "analyzer":{
+            "my_analyzer":{ 
+               "type":"custom",
+               "tokenizer":"my_tokenizer",
+               "filter":[
+                  "my_length_filter", "lowercase"
+               ]
+            },
+            "my_analyzer_comma":{
+               "type":"custom",
+               "tokenizer":"my_tokenizer_comma_only",
+               "filter":[
+                  "my_length_filter", "lowercase"
+               ]
+            }
+          },
+          "tokenizer": {
+            "my_tokenizer": {
+            "type": "simple_pattern_split",
+            "pattern": "[,/]"
+            },
+            "my_tokenizer_comma_only": {
+            "type": "simple_pattern_split",
+            "pattern": "[,]"
+            }
+          },
+          "filter": {
+            "my_length_filter": {
+             "type": "length",
+             "min":2,
+             "max":20
+            }
+          }
+      }
+   },
+  "mappings": {
+    "doc": {
+      "properties": {
+        "did": {"type":"long"},
+        "ti1": {"type":"long"},
+        "ti2": {"type":"long"},
+        "ti3": {"type":"long"},
+        "ti4": {"type":"long"},
+        "ti5": {"type":"long"},
+        "tn1": {"type":"text", "analyzer":"my_analyzer_comma", "search_analyzer":"my_analyzer_comma"},
+        "tn2": {"type":"text", "analyzer":"my_analyzer_comma", "search_analyzer":"my_analyzer_comma"},
+        "tn3": {"type":"text", "analyzer":"my_analyzer_comma", "search_analyzer":"my_analyzer_comma"},
+        "tn4": {"type":"text", "analyzer":"my_analyzer_comma", "search_analyzer":"my_analyzer_comma"},
+        "tn5": {"type":"text", "analyzer":"my_analyzer_comma", "search_analyzer":"my_analyzer_comma"},
+        "ci": {"enabled":false},
+        "dc": {"type":"text", "analyzer":"my_analyzer", "search_analyzer":"my_analyzer"},
+        "dgid": {"type":"long"},
+        "ef": {"type":"short"},
+        "lgtd": {"enabled":false},
+        "ls": {"type":"text"},
+        "lttd": {"enabled":false},
+        "mn": {"type":"text"},
+        "on": {"enabled":false},
+        "pe": {"type":"long"},
+        "po": {"type":"long"},
+        "pot": {"type":"integer"},
+        "ps": {"type":"long"},
+        "set": {"type":"date"},
+        "sn": {"enabled":false},
+        "sst": {"type":"date"},
+        "st": {"type":"integer"}
+      }
+    }
+  }
+}
