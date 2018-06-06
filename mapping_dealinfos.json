@@ -1,3 +1,4 @@
+PUT /deal_word2vec
 {
     "mappings": {
     "doc": {
