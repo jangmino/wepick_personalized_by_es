@@ -3,14 +3,9 @@
     "doc": {
       "properties": {
         "u": {"type":"long"},
-        "hist": {
-          "properties":{
-            "v": {"type":"long"},
-            "slot": {"type":"long"},
-            "rgtime": {"type":"long"},
-            "imp_dt": {"type":"keyword"}
-          }
-        }
+        "v": {"type":"long"},
+        "slot": {"type":"long"},
+        "rgtime": {"type":"date"}
       }
     }
   }
