@@ -1,0 +1,171 @@
+GET /_cat/indices?v
+
+# deal_word2vec mapping
+#
+PUT /deal_word2vec
+{
+    "mappings": {
+    "doc": {
+      "properties": {
+        "v": {"type":"long"},
+        "words": {"type":"keyword"},
+        "values": {"type":"double"}
+      }
+    }
+  }
+}
+
+# wepick_seq mapping
+#
+PUT /wepick_seq
+{
+    "mappings": {
+    "doc": {
+      "properties": {
+        "u": {"type":"long"},
+        "v": {"type":"long"},
+        "slot": {"type":"long"},
+        "rgtime": {"type":"date"}
+      }
+    }
+  }
+}
+
+# dealinfos_mapping
+PUT /dealinfos
+{
+     "settings":{
+      "analysis":{
+         "analyzer":{
+            "my_analyzer":{ 
+               "type":"custom",
+               "tokenizer":"my_tokenizer",
+               "filter":[
+                  "my_length_filter", "lowercase"
+               ]
+            },
+            "my_analyzer_comma":{
+               "type":"custom",
+               "tokenizer":"my_tokenizer_comma_only",
+               "filter":[
+                  "my_length_filter", "lowercase"
+               ]
+            }
+          },
+          "tokenizer": {
+            "my_tokenizer": {
+            "type": "simple_pattern_split",
+            "pattern": "[,/]"
+            },
+            "my_tokenizer_comma_only": {
+            "type": "simple_pattern_split",
+            "pattern": "[,]"
+            }
+          },
+          "filter": {
+            "my_length_filter": {
+             "type": "length",
+             "min":2,
+             "max":20
+            }
+          }
+      }
+   },
+  "mappings": {
+    "doc": {
+      "properties": {
+        "did": {"type":"long"},
+        "ti1": {"type":"long"},
+        "ti2": {"type":"long"},
+        "ti3": {"type":"long"},
+        "ti4": {"type":"long"},
+        "ti5": {"type":"long"},
+        "tn1": {"type":"text", "analyzer":"my_analyzer_comma", "search_analyzer":"my_analyzer_comma"},
+        "tn2": {"type":"text", "analyzer":"my_analyzer_comma", "search_analyzer":"my_analyzer_comma"},
+        "tn3": {"type":"text", "analyzer":"my_analyzer_comma", "search_analyzer":"my_analyzer_comma"},
+        "tn4": {"type":"text", "analyzer":"my_analyzer_comma", "search_analyzer":"my_analyzer_comma"},
+        "tn5": {"type":"text", "analyzer":"my_analyzer_comma", "search_analyzer":"my_analyzer_comma"},
+        "ci": {"enabled":false},
+        "dc": {"type":"text", "analyzer":"my_analyzer", "search_analyzer":"my_analyzer"},
+        "dgid": {"type":"long"},
+        "ef": {"type":"short"},
+        "lgtd": {"enabled":false},
+        "ls": {"type":"text"},
+        "lttd": {"enabled":false},
+        "mn": {"type":"text"},
+        "on": {"enabled":false},
+        "pe": {"type":"long"},
+        "po": {"type":"long"},
+        "pot": {"type":"integer"},
+        "ps": {"type":"long"},
+        "set": {"type":"date"},
+        "sn": {"enabled":false},
+        "sst": {"type":"date"},
+        "st": {"type":"integer"}
+      }
+    }
+  }
+}
+
+#####
+# verification
+GET /deal_word2vec/_search
+{
+  "query": { "match_all": {} }
+}
+
+GET /wepick_seq/_search
+{
+  "query": { "match_all": {} }
+}
+
+GET /wepick_setting/_search
+{
+  "query": { "match_all": {} }
+}
+
+
+
+GET /deal_word2vec/_count
+
+GET /wepick_seq/_count
+
+GET /dealinfos/_count
+
+## DELETE /wepick_seq?pretty
+## DELETE /deal_word2vec?pretty
+## DELETE /dealinfos?pretty
+
+
+GET /wepick_seq/_search
+{
+  "query": {
+    "bool": {
+      "must": { 
+        "term": {"u":1000007}
+      },
+      "filter": {
+        "range" : {
+          "rgtime" : {
+          "lt" :  "2018-04-11"
+          }
+        }
+      }
+    }
+  },
+  "size": 64,
+  "sort": {"rgtime":"desc"}
+}
+
+#####
+PUT /wepick_setting
+{
+    "mappings": {
+    "doc": {
+      "properties": {
+        "dt": {"type":"keyword"},
+        "setting": {"type":"keyword"}
+      }
+    }
+  }
+}
