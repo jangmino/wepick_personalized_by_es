@@ -130,6 +130,8 @@ GET /deal_word2vec/_count
 
 GET /wepick_seq/_count
 
+GET /wepick_setting/
+
 GET /dealinfos/_count
 
 ## DELETE /wepick_seq?pretty
@@ -168,4 +170,28 @@ PUT /wepick_setting
       }
     }
   }
+}
+
+################################
+# aggregation
+GET /wepick_seq/_search?size=0
+{
+  "query": {
+    "bool": {
+      "must": {
+        "term": {"slot":11}
+      },
+      "filter": {
+        "range": {
+          "rgtime":{
+            "gte": "2018-04-10T23:00:00",
+            "lt" : "2018-04-12T00:00:00"
+          }
+        }
+      }
+    }
+  },
+    "aggs" : {
+        "top_tags" : { "terms" : { "field" : "v" } }
+    }
 }
